@@ -2,10 +2,17 @@ import React, { Component } from 'react';
 import './App.css';
 
 
-class TodoItem extends Component {
-  constructor(props) {
-    super(props)
-  }
+const TodoItem = (props) => {
+    const handleChange = (e) => {
+        console.log(e.target)
+        this.props.finished(e)
+    }
+    return (
+        <li>
+            <input type="checkbox" checked={props.item.done} onClick={() => this.props.finished(props.item)}/>
+            <span>{props.item.context}</span>
+        </li>
+    )
 }
 
 class App extends Component {
@@ -23,14 +30,19 @@ class App extends Component {
   }
 
   addTodo = () => {
-    const todoItem = {
-      context: this.text,
-      done: false
-    }
-    this.setState(state => {
-      todoItem
+    const joined = this.state.todoItem.concat({
+        id: this.state.todoItem.length + 1,
+        context: this.state.text,
+        done: false,
     })
-    console.log(this.state.todoItem)
+    this.setState({todoItem: joined})
+  }
+
+  finished = (item) => {
+      console.log("oooo")
+      // item.done = !done
+      // this.setState({todoItem: [...this.state.todoItem, item]})
+      console.log(item)
   }
 
   render() {
@@ -42,6 +54,7 @@ class App extends Component {
         <input type="text" value={this.state.text} onChange={this.handleInput} />
         <button type="button" onClick={this.addTodo}>add</button>
         <br/>
+          {this.state.todoItem.map(item => <TodoItem key={item.id} handleFinished={(item) => this.finished(item)} item={item}></TodoItem>)}
       </div>
     );
   }
