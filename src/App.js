@@ -5,11 +5,11 @@ import './App.css';
 const TodoItem = (props) => {
     const handleChange = (e) => {
         console.log(e.target)
-        this.props.finished(e)
+        props.finished(e)
     }
     return (
         <li>
-            <input type="checkbox" checked={props.item.done} onClick={() => this.props.finished(props.item)}/>
+            <input type="checkbox" checked={props.item.done} onClick={() => props.finished(props.item)}/>
             <span>{props.item.context}</span>
         </li>
     )
@@ -38,11 +38,14 @@ class App extends Component {
     this.setState({todoItem: joined})
   }
 
-  finished = (item) => {
+  finished = (i) => {
       console.log("oooo")
+      console.log(i)
+      i.done = !i.done
       // item.done = !done
-      // this.setState({todoItem: [...this.state.todoItem, item]})
-      console.log(item)
+      this.setState({
+          todoItem: [...this.state.todoItem, i]
+      })
   }
 
   render() {
@@ -54,7 +57,7 @@ class App extends Component {
         <input type="text" value={this.state.text} onChange={this.handleInput} />
         <button type="button" onClick={this.addTodo}>add</button>
         <br/>
-          {this.state.todoItem.map(item => <TodoItem key={item.id} handleFinished={(item) => this.finished(item)} item={item}></TodoItem>)}
+          {this.state.todoItem.map(item => <TodoItem key={item.id} finished={(i) => this.finished(i)} item={item}></TodoItem>)}
       </div>
     );
   }
